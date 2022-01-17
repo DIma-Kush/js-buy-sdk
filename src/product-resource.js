@@ -8,6 +8,7 @@ import productNodeQuery from './graphql/productNodeQuery.graphql';
 import productNodesQuery from './graphql/productNodesQuery.graphql';
 import productConnectionQuery from './graphql/productConnectionQuery.graphql';
 import productByHandleQuery from './graphql/productByHandleQuery.graphql';
+import productRecommendationsQuery from './graphql/productRecommendations.graphql';
 
 /**
  * The JS Buy SDK product resource
@@ -116,6 +117,25 @@ class ProductResource extends Resource {
         reverse
       })
       .then(defaultResolver('products'))
+      .then(paginateProductConnectionsAndResolve(this.graphQLClient));
+  }
+
+  /**
+   * Find recommended products related to a given product_id. To learn more about how recommendations are generated, see Showing product recommendations on product pages.
+   *
+   * @example
+   * const productId 'Xk9lM2JkNzFmNzIQ4NTIY4ZDFi9DaGVja291dC9lM2JkN==';
+   * client.product.fetchProductRecommendations(productId).then((products) => {
+   *   // Do something with the products
+   * });
+   *
+   * @param {String} productId The base64 encoded id of the product to fetch
+   * @return {Promise|GraphModel[]} A promise resolving with an array of `GraphModel`s of the products.
+   */
+  fetchRecommendations(productId) {
+    return this.graphQLClient
+      .send(productRecommendationsQuery, {productId})
+      .then(defaultResolver('productRecommendations'))
       .then(paginateProductConnectionsAndResolve(this.graphQLClient));
   }
 }
