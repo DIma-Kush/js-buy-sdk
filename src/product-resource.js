@@ -121,7 +121,8 @@ class ProductResource extends Resource {
   }
 
   /**
-   * Find recommended products related to a given product_id. To learn more about how recommendations are generated, see Showing product recommendations on product pages.
+   * Find recommended products related to a given productId.
+   * To learn more about how recommendations are generated, see https://shopify.dev/themes/product-merchandising/recommendations.
    *
    * @example
    * const productId 'Xk9lM2JkNzFmNzIQ4NTIY4ZDFi9DaGVja291dC9lM2JkN==';
@@ -129,7 +130,7 @@ class ProductResource extends Resource {
    *   // Do something with the products
    * });
    *
-   * @param {String} productId The base64 encoded id of the product to fetch
+   * @param {String} productId The id of the product to fetch.
    * @return {Promise|GraphModel[]} A promise resolving with an array of `GraphModel`s of the products.
    */
   fetchRecommendations(productId) {
