@@ -2298,7 +2298,7 @@ var Config = function () {
     if (attrs.hasOwnProperty('apiVersion')) {
       this.apiVersion = attrs.apiVersion;
     } else {
-      this.apiVersion = '2022-01';
+      this.apiVersion = '2022-04';
     }
 
     if (attrs.hasOwnProperty('source')) {
@@ -3135,7 +3135,8 @@ var ProductResource = function (_Resource) {
     }
 
     /**
-     * Find recommended products related to a given product_id. To learn more about how recommendations are generated, see Showing product recommendations on product pages.
+     * Find recommended products related to a given productId.
+     * To learn more about how recommendations are generated, see https://shopify.dev/themes/product-merchandising/recommendations.
      *
      * @example
      * const productId 'Xk9lM2JkNzFmNzIQ4NTIY4ZDFi9DaGVja291dC9lM2JkN==';
@@ -3143,7 +3144,7 @@ var ProductResource = function (_Resource) {
      *   // Do something with the products
      * });
      *
-     * @param {String} productId The base64 encoded id of the product to fetch
+     * @param {String} productId The id of the product to fetch.
      * @return {Promise|GraphModel[]} A promise resolving with an array of `GraphModel`s of the products.
      */
 
@@ -8501,7 +8502,7 @@ var ImageResource = function (_Resource) {
   return ImageResource;
 }(Resource);
 
-var version = "2.14.0";
+var version = "2.15.1";
 
 var AppliedGiftCard = {
   "name": "AppliedGiftCard",
@@ -9029,7 +9030,7 @@ var Node = {
   "name": "Node",
   "kind": "INTERFACE",
   "fieldBaseTypes": {},
-  "possibleTypes": ["AppliedGiftCard", "Article", "Blog", "Cart", "CartLine", "Checkout", "CheckoutLineItem", "Collection", "Comment", "ExternalVideo", "Location", "MailingAddress", "MediaImage", "Metafield", "Model3d", "Order", "Page", "Payment", "Product", "ProductOption", "ProductVariant", "ShopPolicy", "Video"]
+  "possibleTypes": ["AppliedGiftCard", "Article", "Blog", "Cart", "CartLine", "Checkout", "CheckoutLineItem", "Collection", "Comment", "ExternalVideo", "GenericFile", "Location", "MailingAddress", "MediaImage", "Menu", "MenuItem", "Metafield", "Model3d", "Order", "Page", "Payment", "Product", "ProductOption", "ProductVariant", "Shop", "ShopPolicy", "Video"]
 };
 
 var Order = {
@@ -9277,7 +9278,7 @@ var Shop = {
     "refundPolicy": "ShopPolicy",
     "termsOfService": "ShopPolicy"
   },
-  "implementsNode": false
+  "implementsNode": true
 };
 
 var ShopPolicy = {

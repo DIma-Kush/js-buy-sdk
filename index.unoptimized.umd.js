@@ -2302,7 +2302,7 @@ var Config = function () {
     if (attrs.hasOwnProperty('apiVersion')) {
       this.apiVersion = attrs.apiVersion;
     } else {
-      this.apiVersion = '2022-01';
+      this.apiVersion = '2022-04';
     }
 
     if (attrs.hasOwnProperty('source')) {
@@ -3139,7 +3139,8 @@ var ProductResource = function (_Resource) {
     }
 
     /**
-     * Find recommended products related to a given product_id. To learn more about how recommendations are generated, see Showing product recommendations on product pages.
+     * Find recommended products related to a given productId.
+     * To learn more about how recommendations are generated, see https://shopify.dev/themes/product-merchandising/recommendations.
      *
      * @example
      * const productId 'Xk9lM2JkNzFmNzIQ4NTIY4ZDFi9DaGVja291dC9lM2JkN==';
@@ -3147,7 +3148,7 @@ var ProductResource = function (_Resource) {
      *   // Do something with the products
      * });
      *
-     * @param {String} productId The base64 encoded id of the product to fetch
+     * @param {String} productId The id of the product to fetch.
      * @return {Promise|GraphModel[]} A promise resolving with an array of `GraphModel`s of the products.
      */
 
@@ -8505,7 +8506,7 @@ var ImageResource = function (_Resource) {
   return ImageResource;
 }(Resource);
 
-var version = "2.14.0";
+var version = "2.15.1";
 
 var ApiVersion = {
   "name": "ApiVersion",
@@ -8577,6 +8578,7 @@ var ArticleConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "ArticleEdge",
+    "nodes": "Article",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -8662,6 +8664,7 @@ var BlogConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "BlogEdge",
+    "nodes": "Blog",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -8700,6 +8703,7 @@ var Cart = {
     "buyerIdentity": "CartBuyerIdentity",
     "checkoutUrl": "URL",
     "createdAt": "DateTime",
+    "deliveryGroups": "CartDeliveryGroupConnection",
     "discountCodes": "CartDiscountCode",
     "estimatedCost": "CartEstimatedCost",
     "id": "ID",
@@ -8783,6 +8787,52 @@ var CartCreatePayload = {
   "implementsNode": false
 };
 
+var CartDeliveryGroup = {
+  "name": "CartDeliveryGroup",
+  "kind": "OBJECT",
+  "fieldBaseTypes": {
+    "cartLines": "CartLineConnection",
+    "deliveryAddress": "MailingAddress",
+    "deliveryOptions": "CartDeliveryOption",
+    "id": "ID"
+  },
+  "implementsNode": false
+};
+
+var CartDeliveryGroupConnection = {
+  "name": "CartDeliveryGroupConnection",
+  "kind": "OBJECT",
+  "fieldBaseTypes": {
+    "edges": "CartDeliveryGroupEdge",
+    "nodes": "CartDeliveryGroup",
+    "pageInfo": "PageInfo"
+  },
+  "implementsNode": false
+};
+
+var CartDeliveryGroupEdge = {
+  "name": "CartDeliveryGroupEdge",
+  "kind": "OBJECT",
+  "fieldBaseTypes": {
+    "cursor": "String",
+    "node": "CartDeliveryGroup"
+  },
+  "implementsNode": false
+};
+
+var CartDeliveryOption = {
+  "name": "CartDeliveryOption",
+  "kind": "OBJECT",
+  "fieldBaseTypes": {
+    "code": "String",
+    "deliveryMethodType": "DeliveryMethodType",
+    "description": "String",
+    "estimatedCost": "MoneyV2",
+    "title": "String"
+  },
+  "implementsNode": false
+};
+
 var CartDiscountAllocation = {
   "name": "CartDiscountAllocation",
   "kind": "INTERFACE",
@@ -8861,6 +8911,7 @@ var CartLineConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "CartLineEdge",
+    "nodes": "CartLine",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -9327,6 +9378,7 @@ var CheckoutLineItemConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "CheckoutLineItemEdge",
+    "nodes": "CheckoutLineItem",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -9463,6 +9515,7 @@ var Collection = {
     "metafields": "MetafieldConnection",
     "onlineStoreUrl": "URL",
     "products": "ProductConnection",
+    "seo": "SEO",
     "title": "String",
     "updatedAt": "DateTime"
   },
@@ -9474,6 +9527,7 @@ var CollectionConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "CollectionEdge",
+    "nodes": "Collection",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -9521,6 +9575,7 @@ var CommentConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "CommentEdge",
+    "nodes": "Comment",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -9540,6 +9595,7 @@ var Country = {
   "name": "Country",
   "kind": "OBJECT",
   "fieldBaseTypes": {
+    "availableLanguages": "Language",
     "currency": "Currency",
     "isoCode": "CountryCode",
     "name": "String",
@@ -9893,6 +9949,11 @@ var Decimal = {
   "kind": "SCALAR"
 };
 
+var DeliveryMethodType = {
+  "name": "DeliveryMethodType",
+  "kind": "ENUM"
+};
+
 var DigitalWallet = {
   "name": "DigitalWallet",
   "kind": "ENUM"
@@ -9930,6 +9991,7 @@ var DiscountApplicationConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "DiscountApplicationEdge",
+    "nodes": "DiscountApplication",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -9995,10 +10057,12 @@ var ExternalVideo = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "alt": "String",
+    "embedUrl": "URL",
     "embeddedUrl": "URL",
     "host": "MediaHost",
     "id": "ID",
     "mediaContentType": "MediaContentType",
+    "originUrl": "URL",
     "previewImage": "Image"
   },
   "implementsNode": true
@@ -10064,6 +10128,7 @@ var FulfillmentLineItemConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "FulfillmentLineItemEdge",
+    "nodes": "FulfillmentLineItem",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -10087,6 +10152,20 @@ var FulfillmentTrackingInfo = {
     "url": "URL"
   },
   "implementsNode": false
+};
+
+var GenericFile = {
+  "name": "GenericFile",
+  "kind": "OBJECT",
+  "fieldBaseTypes": {
+    "alt": "String",
+    "id": "ID",
+    "mimeType": "String",
+    "originalFileSize": "Int",
+    "previewImage": "Image",
+    "url": "URL"
+  },
+  "implementsNode": true
 };
 
 var GeoCoordinateInput = {
@@ -10139,6 +10218,7 @@ var ImageConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "ImageEdge",
+    "nodes": "Image",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -10181,12 +10261,30 @@ var JSON$1 = {
   "kind": "SCALAR"
 };
 
+var Language = {
+  "name": "Language",
+  "kind": "OBJECT",
+  "fieldBaseTypes": {
+    "endonymName": "String",
+    "isoCode": "LanguageCode",
+    "name": "String"
+  },
+  "implementsNode": false
+};
+
+var LanguageCode = {
+  "name": "LanguageCode",
+  "kind": "ENUM"
+};
+
 var Localization = {
   "name": "Localization",
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "availableCountries": "Country",
-    "country": "Country"
+    "availableLanguages": "Language",
+    "country": "Country",
+    "language": "Language"
   },
   "implementsNode": false
 };
@@ -10227,6 +10325,7 @@ var LocationConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "LocationEdge",
+    "nodes": "Location",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -10279,6 +10378,7 @@ var MailingAddressConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "MailingAddressEdge",
+    "nodes": "MailingAddress",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -10341,6 +10441,7 @@ var MediaConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "MediaEdge",
+    "nodes": "Media",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -10379,6 +10480,39 @@ var MediaImage = {
   "implementsNode": true
 };
 
+var Menu = {
+  "name": "Menu",
+  "kind": "OBJECT",
+  "fieldBaseTypes": {
+    "handle": "String",
+    "id": "ID",
+    "items": "MenuItem",
+    "itemsCount": "Int",
+    "title": "String"
+  },
+  "implementsNode": true
+};
+
+var MenuItem = {
+  "name": "MenuItem",
+  "kind": "OBJECT",
+  "fieldBaseTypes": {
+    "id": "ID",
+    "items": "MenuItem",
+    "resourceId": "ID",
+    "tags": "String",
+    "title": "String",
+    "type": "MenuItemType",
+    "url": "URL"
+  },
+  "implementsNode": true
+};
+
+var MenuItemType = {
+  "name": "MenuItemType",
+  "kind": "ENUM"
+};
+
 var Merchandise = {
   "name": "Merchandise",
   "kind": "UNION"
@@ -10407,6 +10541,7 @@ var MetafieldConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "MetafieldEdge",
+    "nodes": "Metafield",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -10567,7 +10702,7 @@ var Node = {
   "fieldBaseTypes": {
     "id": "ID"
   },
-  "possibleTypes": ["AppliedGiftCard", "Article", "Blog", "Cart", "CartLine", "Checkout", "CheckoutLineItem", "Collection", "Comment", "ExternalVideo", "Location", "MailingAddress", "MediaImage", "Metafield", "Model3d", "Order", "Page", "Payment", "Product", "ProductOption", "ProductVariant", "ShopPolicy", "Video"]
+  "possibleTypes": ["AppliedGiftCard", "Article", "Blog", "Cart", "CartLine", "Checkout", "CheckoutLineItem", "Collection", "Comment", "ExternalVideo", "GenericFile", "Location", "MailingAddress", "MediaImage", "Menu", "MenuItem", "Metafield", "Model3d", "Order", "Page", "Payment", "Product", "ProductOption", "ProductVariant", "Shop", "ShopPolicy", "Video"]
 };
 
 var OnlineStorePublishable = {
@@ -10635,6 +10770,7 @@ var OrderConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "OrderEdge",
+    "nodes": "Order",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -10681,6 +10817,7 @@ var OrderLineItemConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "OrderLineItemEdge",
+    "nodes": "OrderLineItem",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -10725,6 +10862,7 @@ var PageConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "PageEdge",
+    "nodes": "Page",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -10744,8 +10882,10 @@ var PageInfo = {
   "name": "PageInfo",
   "kind": "OBJECT",
   "fieldBaseTypes": {
+    "endCursor": "String",
     "hasNextPage": "Boolean",
-    "hasPreviousPage": "Boolean"
+    "hasPreviousPage": "Boolean",
+    "startCursor": "String"
   },
   "implementsNode": false
 };
@@ -10865,6 +11005,7 @@ var ProductConnection = {
   "fieldBaseTypes": {
     "edges": "ProductEdge",
     "filters": "Filter",
+    "nodes": "Product",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -10966,6 +11107,7 @@ var ProductVariantConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "ProductVariantEdge",
+    "nodes": "ProductVariant",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -11001,6 +11143,7 @@ var QueryRoot = {
     "customer": "Customer",
     "localization": "Localization",
     "locations": "LocationConnection",
+    "menu": "Menu",
     "node": "Node",
     "nodes": "Node",
     "page": "Page",
@@ -11089,6 +11232,7 @@ var SellingPlanAllocationConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "SellingPlanAllocationEdge",
+    "nodes": "SellingPlanAllocation",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -11121,6 +11265,7 @@ var SellingPlanConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "SellingPlanEdge",
+    "nodes": "SellingPlan",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -11171,6 +11316,7 @@ var SellingPlanGroupConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "SellingPlanGroupEdge",
+    "nodes": "SellingPlanGroup",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -11247,6 +11393,7 @@ var Shop = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "description": "String",
+    "id": "ID",
     "metafield": "Metafield",
     "metafields": "MetafieldConnection",
     "moneyFormat": "String",
@@ -11260,7 +11407,7 @@ var Shop = {
     "subscriptionPolicy": "ShopPolicyWithDefault",
     "termsOfService": "ShopPolicy"
   },
-  "implementsNode": false
+  "implementsNode": true
 };
 
 var ShopPolicy = {
@@ -11305,6 +11452,7 @@ var StoreAvailabilityConnection = {
   "kind": "OBJECT",
   "fieldBaseTypes": {
     "edges": "StoreAvailabilityEdge",
+    "nodes": "StoreAvailability",
     "pageInfo": "PageInfo"
   },
   "implementsNode": false
@@ -11500,6 +11648,7 @@ var __Directive = {
   "fieldBaseTypes": {
     "args": "__InputValue",
     "description": "String",
+    "isRepeatable": "Boolean",
     "locations": "__DirectiveLocation",
     "name": "String",
     "onField": "Boolean",
@@ -11561,6 +11710,7 @@ var __Schema = {
   "name": "__Schema",
   "kind": "OBJECT",
   "fieldBaseTypes": {
+    "description": "String",
     "directives": "__Directive",
     "mutationType": "__Type",
     "queryType": "__Type",
@@ -11586,7 +11736,8 @@ var __Type = {
     "name": "String",
     "ofType": "__Type",
     "possibleTypes": "__Type",
-    "requiredAccess": "String"
+    "requiredAccess": "String",
+    "specifiedByUrl": "String"
   },
   "implementsNode": false
 };
@@ -11624,6 +11775,10 @@ Types.types["CartBuyerIdentityInput"] = CartBuyerIdentityInput;
 Types.types["CartBuyerIdentityUpdatePayload"] = CartBuyerIdentityUpdatePayload;
 Types.types["CartCodeDiscountAllocation"] = CartCodeDiscountAllocation;
 Types.types["CartCreatePayload"] = CartCreatePayload;
+Types.types["CartDeliveryGroup"] = CartDeliveryGroup;
+Types.types["CartDeliveryGroupConnection"] = CartDeliveryGroupConnection;
+Types.types["CartDeliveryGroupEdge"] = CartDeliveryGroupEdge;
+Types.types["CartDeliveryOption"] = CartDeliveryOption;
 Types.types["CartDiscountAllocation"] = CartDiscountAllocation;
 Types.types["CartDiscountCode"] = CartDiscountCode;
 Types.types["CartDiscountCodesUpdatePayload"] = CartDiscountCodesUpdatePayload;
@@ -11725,6 +11880,7 @@ Types.types["CustomerUpdatePayload"] = CustomerUpdatePayload;
 Types.types["CustomerUserError"] = CustomerUserError;
 Types.types["DateTime"] = DateTime;
 Types.types["Decimal"] = Decimal;
+Types.types["DeliveryMethodType"] = DeliveryMethodType;
 Types.types["DigitalWallet"] = DigitalWallet;
 Types.types["DiscountAllocation"] = DiscountAllocation;
 Types.types["DiscountApplication"] = DiscountApplication;
@@ -11746,6 +11902,7 @@ Types.types["FulfillmentLineItem"] = FulfillmentLineItem;
 Types.types["FulfillmentLineItemConnection"] = FulfillmentLineItemConnection;
 Types.types["FulfillmentLineItemEdge"] = FulfillmentLineItemEdge;
 Types.types["FulfillmentTrackingInfo"] = FulfillmentTrackingInfo;
+Types.types["GenericFile"] = GenericFile;
 Types.types["GeoCoordinateInput"] = GeoCoordinateInput;
 Types.types["HTML"] = HTML;
 Types.types["HasMetafields"] = HasMetafields;
@@ -11757,6 +11914,8 @@ Types.types["ImageEdge"] = ImageEdge;
 Types.types["ImageTransformInput"] = ImageTransformInput;
 Types.types["Int"] = Int;
 Types.types["JSON"] = JSON$1;
+Types.types["Language"] = Language;
+Types.types["LanguageCode"] = LanguageCode;
 Types.types["Localization"] = Localization;
 Types.types["Location"] = Location;
 Types.types["LocationAddress"] = LocationAddress;
@@ -11774,6 +11933,9 @@ Types.types["MediaContentType"] = MediaContentType;
 Types.types["MediaEdge"] = MediaEdge;
 Types.types["MediaHost"] = MediaHost;
 Types.types["MediaImage"] = MediaImage;
+Types.types["Menu"] = Menu;
+Types.types["MenuItem"] = MenuItem;
+Types.types["MenuItemType"] = MenuItemType;
 Types.types["Merchandise"] = Merchandise;
 Types.types["Metafield"] = Metafield;
 Types.types["MetafieldConnection"] = MetafieldConnection;
